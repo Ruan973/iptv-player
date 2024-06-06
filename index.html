@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IPTV Player</title>
+    <link href="https://vjs.zencdn.net/7.20.3/video-js.css" rel="stylesheet">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -57,13 +58,17 @@
 </head>
 <body>
     <div class="container">
-        <video id="videoPlayer" class="video-player" controls></video>
+        <video id="videoPlayer" class="video-js vjs-default-skin video-player" controls preload="auto" data-setup='{}'>
+            <source id="videoSource" type="application/x-mpegURL">
+            Seu navegador não suporta HTML5.
+        </video>
         <div id="channelList" class="channel-list"></div>
     </div>
 
+    <script src="https://vjs.zencdn.net/7.20.3/video.min.js"></script>
     <script>
         const channels = [
-            { name: "TF1", logo: "https://companieslogo.com/img/orig/TFI.PA-8c6da426.png?t=1595999846", url: "https://www.kool.to/play/1484327785/index.m3u8" },
+            { name: "TF1", logo: "https://companieslogo.com/img/orig/TFI.PA-8c6da426.png?t=1595999846", url: "https://oha.to/play/1484327785/index.m3u8" },
             { name: "France 2", logo: "https://logos-marques.com/wp-content/uploads/2022/03/France-2-Logo.png", url: "https://oha.to/play/4025894057/index.m3u8" },
             { name: "France 3", logo: "https://tv-production.fr/wp-content/uploads/logo-france-3-300x256.png", url: "https://oha.to/play/1970490613/index.m3u8" },
             { name: "Canal+", logo: "https://logos-marques.com/wp-content/uploads/2020/04/Canal-Logo.png", url: "https://oha.to/play/3780364466/index.m3u8" },
@@ -82,9 +87,9 @@
             { name: "TF1 Series Films", logo: "https://upload.wikimedia.org/wikipedia/fr/thumb/4/4b/TF1_S%C3%A9ries_Films_logo_2020.svg/320px-TF1_S%C3%A9ries_Films_logo_2020.svg.png", url: "https://oha.to/play/1760063888/index.m3u8" },
             { name: "L'EQUIPE", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/La_cha%C3%AEne_l%27Equipe_-_logo_2016.png/200px-La_cha%C3%AEne_l%27Equipe_-_logo_2016.png", url: "https://oha.to/play/3837331942/index.m3u8" },
             { name: "6TER FHD", logo: "https://cdn.woopic.com/v1/AUTH_9ffb653181284b0abe5e45d7014095b2/boutique-tv/6ter_1280@1x_65607c5f7b9f375cb284d4fd.png", url: "https://oha.to/play/4239659507/index.m3u8" },
-            { name: "RMC STORY", logo: "https://upload.wikimedia.org/wikipedia/fr/thumb/3/3e/RMC_Story_logo_2018.svg/320px-RMC_Story_logo_2018.svg.png", url: "https://oha.to/play/968071291/index.m3u8" },
-            { name: "RMC DECOUVERTE", logo: "https://upload.wikimedia.org/wikipedia/fr/thumb/b/b3/RMC_D%C3%A9couverte_logo_2017.svg/320px-RMC_D%C3%A9couverte_logo_2017.svg.png", url: "https://oha.to/play/2606615076/index.m3u8" },
-            { name: "CHERIE 25", logo: "https://upload.wikimedia.org/wikipedia/fr/thumb/f/f0/Ch%C3%A9rie_25_logo_2015.svg/240px-Ch%C3%A9rie_25_logo_2015.svg.png", url: "https://oha.to/play/4244955973/index.m3u8" },
+            { name: "RMC STORY", logo: "https://upload.wikimedia.org/wikipedia/fr/thumb/7/74/RMC_Story_-_Logo_2019.svg/320px-RMC_Story_-_Logo_2019.svg.png", url: "https://oha.to/play/1445806523/index.m3u8" },
+            { name: "RMC DECOUVERTE", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/RMC_D%C3%A9couverte_Logo_2019.png/320px-RMC_D%C3%A9couverte_Logo_2019.png", url: "https://oha.to/play/2210892417/index.m3u8" },
+            { name: "Chérie 25", logo: "https://upload.wikimedia.org/wikipedia/fr/thumb/f/f0/Ch%C3%A9rie_25_logo_2015.svg/240px-Ch%C3%A9rie_25_logo_2015.svg.png", url: "https://oha.to/play/4244955973/index.m3u8" },
             { name: "LCI", logo: "https://upload.wikimedia.org/wikipedia/fr/thumb/3/38/LCI_-_Logo_%28Ao%C3%BBt_2017%29.svg/620px-LCI_-_Logo_%28Ao%C3%BBt_2017%29.svg.png", url: "https://oha.to/play/3143227243/index.m3u8" },
             { name: "Franceinfo", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Franceinfo.svg/510px-Franceinfo.svg.png", url: "https://oha.to/play/1158759400/index.m3u8" },
             { name: "TV5 MONDE", logo: "https://cdn.woopic.com/v1/AUTH_9ffb653181284b0abe5e45d7014095b2/boutique-tv/livetv_tv5-Clair-500x500_1280@1x_65bcf31f0c42497cf14fe391.png", url: "https://oha.to/play/3769189460/index.m3u8" },
@@ -95,7 +100,8 @@
         ];
 
         const channelList = document.getElementById('channelList');
-        const videoPlayer = document.getElementById('videoPlayer');
+        const videoPlayer = videojs('videoPlayer');
+        const videoSource = document.getElementById('videoSource');
 
         channels.forEach(channel => {
             const item = document.createElement('div');
@@ -106,7 +112,8 @@
         });
 
         function loadChannel(url) {
-            videoPlayer.src = url;
+            videoSource.src = url;
+            videoPlayer.src({ type: 'application/x-mpegURL', src: url });
             videoPlayer.play();
         }
     </script>
