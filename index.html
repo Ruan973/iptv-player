@@ -67,6 +67,7 @@
 
     <script src="https://vjs.zencdn.net/7.20.3/video.min.js"></script>
     <script>
+        const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
         const channels = [
             { name: "TF1", logo: "https://companieslogo.com/img/orig/TFI.PA-8c6da426.png?t=1595999846", url: "https://oha.to/play/1484327785/index.m3u8" },
             { name: "France 2", logo: "https://logos-marques.com/wp-content/uploads/2022/03/France-2-Logo.png", url: "https://oha.to/play/4025894057/index.m3u8" },
@@ -84,9 +85,9 @@
             { name: "CNEWS", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Canal_News_logo.svg/320px-Canal_News_logo.svg.png", url: "https://oha.to/play/2245305073/index.m3u8" },
             { name: "CSTAR FHD", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/CStar_vector.svg/320px-CStar_vector.svg.png", url: "https://oha.to/play/3480426017/index.m3u8" },
             { name: "GULLI FHD", logo: "https://static.wikia.nocookie.net/tvfanon6528/images/1/14/Gulli_HD_%282015-2017%29.png", url: "https://oha.to/play/2096981520/index.m3u8" },
-            { name: "TF1 Series Films", logo: "https://upload.wikimedia.org/wikipedia/fr/thumb/4/4b/TF1_S%C3%A9ries_Films_logo_2020.svg/320px-TF1_S%C3%A9ries_Films_logo_2020.svg.png", url: "https://oha.to/play/1760063888/index.m3u8" },
-            { name: "L'EQUIPE", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/La_cha%C3%AEne_l%27Equipe_-_logo_2016.png/200px-La_cha%C3%AEne_l%27Equipe_-_logo_2016.png", url: "https://oha.to/play/3837331942/index.m3u8" },
-            { name: "6TER FHD", logo: "https://cdn.woopic.com/v1/AUTH_9ffb653181284b0abe5e45d7014095b2/boutique-tv/6ter_1280@1x_65607c5f7b9f375cb284d4fd.png", url: "https://oha.to/play/4239659507/index.m3u8" },
+            { name: "TF1 Series Films", logo: "https://upload.wikimedia.org/wikipedia/fr/thumb/5/53/TF1_S%C3%A9ries_Films_Logo.svg/320px-TF1_S%C3%A9ries_Films_Logo.svg.png", url: "https://oha.to/play/1974284053/index.m3u8" },
+            { name: "L'EQUIPE", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Logo_L%27%C3%89quipe_21.svg/320px-Logo_L%27%C3%89quipe_21.svg.png", url: "https://oha.to/play/1916212250/index.m3u8" },
+            { name: "6TER", logo: "https://upload.wikimedia.org/wikipedia/fr/thumb/c/cb/6ter_2019.svg/320px-6ter_2019.svg.png", url: "https://oha.to/play/79592555/index.m3u8" },
             { name: "RMC STORY", logo: "https://upload.wikimedia.org/wikipedia/fr/thumb/7/74/RMC_Story_-_Logo_2019.svg/320px-RMC_Story_-_Logo_2019.svg.png", url: "https://oha.to/play/1445806523/index.m3u8" },
             { name: "RMC DECOUVERTE", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/RMC_D%C3%A9couverte_Logo_2019.png/320px-RMC_D%C3%A9couverte_Logo_2019.png", url: "https://oha.to/play/2210892417/index.m3u8" },
             { name: "Chérie 25", logo: "https://upload.wikimedia.org/wikipedia/fr/thumb/f/f0/Ch%C3%A9rie_25_logo_2015.svg/240px-Ch%C3%A9rie_25_logo_2015.svg.png", url: "https://oha.to/play/4244955973/index.m3u8" },
@@ -112,8 +113,8 @@
         });
 
         function loadChannel(url) {
-            videoSource.src = url;
-            videoPlayer.src({ type: 'application/x-mpegURL', src: url });
+            videoSource.src = proxyUrl + url;
+            videoPlayer.src({ type: 'application/x-mpegURL', src: proxyUrl + url });
             videoPlayer.play();
         }
     </script>
