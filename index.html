@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IPTV Player</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: url('https://wallpapers.com/images/featured/channel-background-9hnqdzccgpsmyvik.jpg') no-repeat center center fixed;
+            background-size: cover;
+            margin: 0;
+            padding: 0;
+            color: #fff;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.5); /* Para dar um efeito de sobreposição escura */
+            border-radius: 10px;
+            margin: 20px;
+        }
+        .video-player {
+            width: 80%;
+            max-width: 800px;
+            margin-bottom: 20px;
+            border: 2px solid #fff;
+            border-radius: 10px;
+        }
+        .channel-list {
+            width: 80%;
+            max-width: 800px;
+        }
+        .channel-item {
+            background: rgba(255, 255, 255, 0.8); /* Fundo translúcido */
+            color: #000;
+            padding: 10px;
+            margin: 5px 0;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        .channel-item:hover {
+            background: rgba(255, 255, 255, 1); /* Fundo mais claro ao passar o mouse */
+        }
+        .channel-logo {
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <video id="videoPlayer" class="video-player" controls></video>
+        <div id="channelList" class="channel-list"></div>
+    </div>
+
+    <script>
+        const channels = [
+            { name: "TF1", logo: "https://companieslogo.com/img/orig/TFI.PA-8c6da426.png?t=1595999846", url: "https://oha.to/play/1484327785/index.m3u8" },
+            { name: "France 2", logo: "https://logos-marques.com/wp-content/uploads/2022/03/France-2-Logo.png", url: "https://oha.to/play/4025894057/index.m3u8" },
+            { name: "France 3", logo: "https://tv-production.fr/wp-content/uploads/logo-france-3-300x256.png", url: "https://oha.to/play/1970490613/index.m3u8" },
+            { name: "Canal+", logo: "https://logos-marques.com/wp-content/uploads/2020/04/Canal-Logo.png", url: "https://oha.to/play/3780364466/index.m3u8" },
+            { name: "M6", logo: "https://stock.wikimini.org/w/images/d/db/Logo_M6.png", url: "https://www.kool.to/play/3435456326/index.m3u8" },
+            { name: "C8", logo: "https://upload.wikimedia.org/wikipedia/commons/0/07/C8_t%C3%A9l%C3%A9.png", url: "https://oha.to/play/975685108/index.m3u8" },
+            { name: "W9", logo: "https://pbs.twimg.com/media/GIYJJHNWIAAs9k9.png", url: "https://oha.to/play/128046615/index.m3u8" },
+            { name: "TMC", logo: "https://upload.wikimedia.org/wikipedia/fr/thumb/a/a8/TMC_logo_2016.svg/320px-TMC_logo_2016.svg.png", url: "https://oha.to/play/4228507215/index.m3u8" },
+            { name: "TFX", logo: "https://upload.wikimedia.org/wikipedia/fr/thumb/8/83/TFX_logo_2018.svg/320px-TFX_logo_2018.svg.png", url: "https://oha.to/play/965401356/index.m3u8" },
+            { name: "NRJ 12", logo: "https://upload.wikimedia.org/wikipedia/fr/4/44/NRJ12-Logo.png", url: "https://oha.to/play/320790022/index.m3u8" },
+            { name: "LCP PUBLIC SENAT", logo: "https://upload.wikimedia.org/wikipedia/fr/thumb/6/6a/Logo_LCP-AN_-_Public_S%C3%A9nat_%282019%29.svg/208px-Logo_LCP-AN_-_Public_S%C3%A9nat_%282019%29.svg.png", url: "https://oha.to/play/1953594991/index.m3u8" },
+            { name: "FRANCE 4", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/F4_Okoo_Culturebox.png/213px-F4_Okoo_Culturebox.png", url: "https://oha.to/play/3145317850/index.m3u8" },
+            { name: "BFMTV", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/BFM_TV_logo.png/240px-BFM_TV_logo.png", url: "https://oha.to/play/1080830216/index.m3u8" },
+            { name: "CNEWS", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Canal_News_logo.svg/320px-Canal_News_logo.svg.png", url: "https://oha.to/play/2245305073/index.m3u8" },
+            { name: "CSTAR FHD", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/CStar_vector.svg/320px-CStar_vector.svg.png", url: "https://oha.to/play/3480426017/index.m3u8" },
+            { name: "GULLI FHD", logo: "https://static.wikia.nocookie.net/tvfanon6528/images/1/14/Gulli_HD_%282015-2017%29.png", url: "https://oha.to/play/2096981520/index.m3u8" },
+            { name: "TF1 Series Films", logo: "https://upload.wikimedia.org/wikipedia/fr/thumb/4/4b/TF1_S%C3%A9ries_Films_logo_2020.svg/320px-TF1_S%C3%A9ries_Films_logo_2020.svg.png", url: "https://oha.to/play/1760063888/index.m3u8" },
+            { name: "L'EQUIPE", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/La_cha%C3%AEne_l%27Equipe_-_logo_2016.png/200px-La_cha%C3%AEne_l%27Equipe_-_logo_2016.png", url: "https://oha.to/play/3837331942/index.m3u8" },
+            { name: "6TER FHD", logo: "https://cdn.woopic.com/v1/AUTH_9ffb653181284b0abe5e45d7014095b2/boutique-tv/6ter_1280@1x_65607c5f7b9f375cb284d4fd.png", url: "https://oha.to/play/4239659507/index.m3u8" },
+            { name: "RMC STORY", logo: "https://upload.wikimedia.org/wikipedia/fr/thumb/3/3e/RMC_Story_logo_2018.svg/320px-RMC_Story_logo_2018.svg.png", url: "https://oha.to/play/968071291/index.m3u8" },
+            { name: "RMC DECOUVERTE", logo: "https://upload.wikimedia.org/wikipedia/fr/thumb/b/b3/RMC_D%C3%A9couverte_logo_2017.svg/320px-RMC_D%C3%A9couverte_logo_2017.svg.png", url: "https://oha.to/play/2606615076/index.m3u8" },
+            { name: "CHERIE 25", logo: "https://upload.wikimedia.org/wikipedia/fr/thumb/f/f0/Ch%C3%A9rie_25_logo_2015.svg/240px-Ch%C3%A9rie_25_logo_2015.svg.png", url: "https://oha.to/play/4244955973/index.m3u8" },
+            { name: "LCI", logo: "https://upload.wikimedia.org/wikipedia/fr/thumb/3/38/LCI_-_Logo_%28Ao%C3%BBt_2017%29.svg/620px-LCI_-_Logo_%28Ao%C3%BBt_2017%29.svg.png", url: "https://oha.to/play/3143227243/index.m3u8" },
+            { name: "Franceinfo", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Franceinfo.svg/510px-Franceinfo.svg.png", url: "https://oha.to/play/1158759400/index.m3u8" },
+            { name: "TV5 MONDE", logo: "https://cdn.woopic.com/v1/AUTH_9ffb653181284b0abe5e45d7014095b2/boutique-tv/livetv_tv5-Clair-500x500_1280@1x_65bcf31f0c42497cf14fe391.png", url: "https://oha.to/play/3769189460/index.m3u8" },
+            { name: "TÉVA", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/T%C3%A9va_logo_2021.svg/240px-T%C3%A9va_logo_2021.svg.png", url: "https://oha.to/play/805332860/index.m3u8" },
+            { name: "PARIS PREMIERE", logo: "https://upload.wikimedia.org/wikipedia/fr/thumb/d/d1/Paris_Premi%C3%A8re_2011.svg/320px-Paris_Premi%C3%A8re_2011.svg.png", url: "https://oha.to/play/1398895618/index.m3u8" },
+            { name: "RTL9", logo: "https://cdn.woopic.com/v1/AUTH_9ffb653181284b0abe5e45d7014095b2/boutique-tv/Logo_RTL9_2023.svg_1280@1x_661951a27380e87e1317936d.png", url: "https://oha.to/play/506999453/index.m3u8" },
+            { name: "TV BREIZH", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/2014_TVBreizh.png/320px-2014_TVBreizh.png", url: "https://oha.to/play/36354660/index.m3u8" }
+        ];
+
+        const channelList = document.getElementById('channelList');
+        const videoPlayer = document.getElementById('videoPlayer');
+
+        channels.forEach(channel => {
+            const item = document.createElement('div');
+            item.className = 'channel-item';
+            item.innerHTML = `<img src="${channel.logo}" class="channel-logo" alt="${channel.name} Logo"><span>${channel.name}</span>`;
+            item.addEventListener('click', () => loadChannel(channel.url));
+            channelList.appendChild(item);
+        });
+
+        function loadChannel(url) {
+            videoPlayer.src = url;
+            videoPlayer.play();
+        }
+    </script>
+</body>
+</html>
